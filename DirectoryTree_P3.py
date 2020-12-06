@@ -131,7 +131,7 @@ class DirectoryTreeGUI:
 										
 				print('THESE ARE THE SUBDIRECTORIES: ')
 				print(os.listdir(pathName))
-				self.push(subdirs)
+				#self.push(subdirs)
 					
 			elif os.path.isfile(pathName): ##IF IT IS A FILE
 				print('THIS IS A FILE: ', path)
@@ -140,7 +140,7 @@ class DirectoryTreeGUI:
 			else: ##IF IT IS NEITHER
 				print('THIS IS NOTHING: ', pathName)
 		
-		#self.push(subdirs)
+			self.push(subdirs)
 		
 	
 		
