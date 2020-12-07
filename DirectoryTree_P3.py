@@ -185,10 +185,11 @@ class DirectoryTreeGUI:
 				print('THIS IS NOTHING: ', pathName)
 		
 			self.push(subdirs)
-			#os.chdir(self.rootDirectory)
+			os.chdir(self.rootDirectory)
 			
 	def makeGUI(self): ##to create gui
-		mainframe.pack_forget()
+		##mainframe.destroy()
+		window = tk.Tk()
 		buttext =self.getRoot()
 		rootbutton = tk.Button(window, text=buttext)
 		rootbutton.pack()
@@ -199,10 +200,10 @@ class DirectoryTreeGUI:
 				pathName = os.path.join(self.getRoot(),path)
 				if os.path.isdir(pathName): ##IF IT IS A DIRECTORY
 					if(i==0):
-						directorybutton = tk.Button(window, text=path, command=self.changeRoot(path))
+						directorybutton = tk.Button(window, text=path, command= lambda: self.changeRoot(pathName))
 						directorybutton.pack()
 					else:
-						subdirbutton = tk.Button(window, text=path, command=self.changeRoot(path))
+						subdirbutton = tk.Button(window, text=path, command= lambda: self.changeRoot(pathName))
 						subdirbutton.pack()
 					i+=1
 				elif os.path.isfile(pathName): ##IF IT IS A FILE
