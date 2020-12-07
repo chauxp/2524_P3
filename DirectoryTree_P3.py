@@ -7,18 +7,18 @@
 import os
 import tkinter as tk
 
-
+#create tk window
+window = tk.Tk() 
+#folderImg = tk.PhotoImage(file='./freefoldericon.png') 
+#fileImg = tk.PhotoImage(file='./freefileicon.png')
 
 def main():
 	directory = os.environ.get('HOME') 
 	#os.chdir(directory) #os set to home directory
 	
-	#os.chdir(directory)
-	#print (os.environ.get('HOME'))
-	window = tk.Tk() #create tk window
-	folderImg = tk.PhotoImage(file='./freefoldericon.png') 
-	fileImg = tk.PhotoImage('./freefileicon.png')
-	test = DirectoryTreeGUI(window,folderImg,fileImg)
+	
+	
+	test = DirectoryTreeGUI()
 	
 	test.getContents()
 	#commandlinebutton = tk.Button
@@ -34,10 +34,6 @@ def main():
 	test.printFullDir()
 	
 	
-	#treeGenerator(directory)
-	
-	#print (os.path.basename('/home/pierrechaux/Documents.txt'))
-
 def treeGenerator(rootName):
 	#print(rootName)
 	#print(os.listdir())
@@ -80,27 +76,24 @@ def toggleDirButton(but, selected):
 	"""
 
 class DirectoryTreeGUI:
-	def __init__ (self, master, folderImg, fileImg, rootDirectory= os.environ.get('HOME'), subpaths=[], ):
+	def __init__ (self, rootDirectory= os.environ.get('HOME'), subpaths=[]):
 		#windowFrame = tk.Frame(master) ##tk master window passed through constructor
 		#
 		self.rootDirectory = rootDirectory
-		self.folderImg = folderImg
-		#self.selectFolderImg = tk.PhotoImage(file='./freefoldericon-selected.png')
-		self.fileImg = fileImg
-		#self.selectFileImg = tk.PhotoImage(file='./freefileicon-selected.png')
+		
 		
 		os.chdir(self.rootDirectory)
 		self.subpaths = subpaths
-		self.master = master
+		#self.master = master
 		self.getDatafromRoot()
 		self.makeGUI()
 		
 		self.selectedPath=rootDirectory
 		
-		self.currSelect = currSelect
+		#self.currSelect = currSelect
 		##self.currSelect= tk.Button(self, image = self.selectFolderImg, command=self.changeSelection(self.selectedPath))
 		
-		self.currSelect.pack()
+		
 
 		
 	def push(self, x): #append to subpaths
@@ -190,12 +183,12 @@ class DirectoryTreeGUI:
 			#os.chdir(self.rootDirectory)
 			
 	def makeGUI(self): ##to create gui
-		windowFrame = tk.Frame(self.master)
-		rootbutton = tk.Button(self, text=self.getRoot(), command=self.changeRoot(self.getRoot()))
+		buttext =self.getRoot()
+		rootbutton = tk.Button(window, text=buttext)
 		
 		
 		
-		windowFrame.mainloop()
+		window.mainloop()
 		
 	"""	
 class buttonIcon:
