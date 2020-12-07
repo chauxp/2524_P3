@@ -6,6 +6,7 @@
 
 import os
 import tkinter as tk
+from functools import partial
 
 #create tk window
 window = tk.Tk() 
@@ -145,12 +146,15 @@ class DirectoryTreeGUI:
 	
 	def changeRoot(self,newRoot): #set new root
 		self.rootDirectory = newRoot
-		os.chdir(self.rootDirectory)
+		os.chdir(newRoot)
 		self.getDatafromRoot()
 		self.makeGUI()
 		
 	def getRoot(self): #gets root name
 		return self.rootDirectory
+		
+	def fileSelection(self):
+		print("This is only a file, it cannot be accessed")
 	
 	#def search(self, searched)
 	
@@ -190,30 +194,36 @@ class DirectoryTreeGUI:
 	def makeGUI(self): ##to create gui
 		##mainframe.destroy()
 		window = tk.Tk()
+		
 		buttext =self.getRoot()
 		rootbutton = tk.Button(window, text=buttext)
 		rootbutton.pack()
-	
+		buttons = {}
+		x=0
 		for array in self.subpaths:
 			i=0
 			for path in array:
-				pathName = os.path.join(self.getRoot(),path)
-				if os.path.isdir(pathName): ##IF IT IS A DIRECTORY
+				fullPath = os.path.join(self.getRoot(),path)
+				if os.path.isdir(path) and not("." in path): ##IF IT IS A DIRECTORY
 					if(i==0):
-						directorybutton = tk.Button(window, text=path, command= lambda: self.changeRoot(pathName))
-						directorybutton.pack()
+						buttons[x] = tk.Button(window, text=path, command= partial(self.changeRoot,path))
+						buttons[x].pack()
+						print("THIS GOT OKAYED: ", fullPath)
+						print("is this it?: ", self.subpaths[x][i])
 					else:
-						subdirbutton = tk.Button(window, text=path, command= lambda: self.changeRoot(pathName))
-						subdirbutton.pack()
+						buttons[x] = tk.Button(window, text=path, command= partial(self.changeRoot, path))
+						buttons[x].pack()
 					i+=1
-				elif os.path.isfile(pathName): ##IF IT IS A FILE
+				elif os.path.isfile(fullPath): ##IF IT IS A FILE
 					if(i==0):
-						directorybutton = tk.Button(window, text=path)
-						directorybutton.pack()
+						buttons[x] = tk.Button(window, text=path, command = self.fileSelection)
+						buttons[x].pack()
 					else:
 						
-						subdirbutton = tk.Button(window, text=path)
-						subdirbutton.pack()
+						subdirbutton[x] = tk.Button(window, text=path, command = self.fileSelection)
+						subdirbutton[x].pack()
+					i+=1
+			x+=1
 		
 		window.mainloop()
 		
