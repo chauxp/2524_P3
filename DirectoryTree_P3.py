@@ -11,21 +11,27 @@ import tkinter as tk
 
 def main():
 	directory = os.environ.get('HOME') 
-	os.chdir(directory) #os set to home directory
+	#os.chdir(directory) #os set to home directory
 	
 	#os.chdir(directory)
 	#print (os.environ.get('HOME'))
 	window = tk.Tk() #create tk window
-	test = DirectoryTreeGUI(window)
+	folderImg = tk.PhotoImage(file='./freefoldericon.png') 
+	fileImg = tk.PhotoImage('./freefileicon.png')
+	test = DirectoryTreeGUI(window,folderImg,fileImg)
 	
 	test.getContents()
+	#commandlinebutton = tk.Button
+	#outputFileButton = tk.Button
+	guiButton = tk.Button
 	
-	window.mainloop()
+	
 	print(test.getRoot())
 	#tk._test()
 	#app = tk.Window(window)
 	greeting = tk.Label(text="Hello, Tkinter") 
 	greeting.pack()
+	test.printFullDir()
 	
 	
 	#treeGenerator(directory)
@@ -74,13 +80,27 @@ def toggleDirButton(but, selected):
 	"""
 
 class DirectoryTreeGUI:
-	def __init__ (self, master, rootDirectory= os.environ.get('HOME'), subpaths=[]):
-		windowFrame = tk.Frame(master) ##tk master window passed through constructor
+	def __init__ (self, master, folderImg, fileImg, rootDirectory= os.environ.get('HOME'), subpaths=[], ):
+		#windowFrame = tk.Frame(master) ##tk master window passed through constructor
+		#
 		self.rootDirectory = rootDirectory
+		self.folderImg = folderImg
+		#self.selectFolderImg = tk.PhotoImage(file='./freefoldericon-selected.png')
+		self.fileImg = fileImg
+		#self.selectFileImg = tk.PhotoImage(file='./freefileicon-selected.png')
+		
 		os.chdir(self.rootDirectory)
 		self.subpaths = subpaths
 		self.master = master
 		self.getDatafromRoot()
+		self.makeGUI()
+		
+		self.selectedPath=rootDirectory
+		
+		self.currSelect = currSelect
+		##self.currSelect= tk.Button(self, image = self.selectFolderImg, command=self.changeSelection(self.selectedPath))
+		
+		self.currSelect.pack()
 
 		
 	def push(self, x): #append to subpaths
@@ -94,19 +114,48 @@ class DirectoryTreeGUI:
 	def selectFolder(self,PathName): #when a folder is selected, the options change
 		return 0
 	
+	
+	def printToCommandLine(self):
+		print(self.getRoot)
+		for array in self.subpaths:
+			i=0
+			for path in array:
+				if(i==0):
+					print("\t",path)
+					
+				else:
+					print("\t\t",path)
+				i+=1
+	
+	def printFullDir(self):
+		print(self.getRoot)
+		for array in self.subpaths:
+			i=1
+			for path in array:
+				if(i==1):
+					print("\t"*i,path)
+					i+=1
+					
+				else:
+					print("\t"*i,path)
+				
+	
 	def selectFile(self,PathName): #when a file is selected, the options change
 		return 0
 		
 	def getContents(self): #returns contents of array -for testing
-		print(self.subpaths)
-		print(len(self.subpaths))
+		return self.subpaths
+		
 		
 	def changeRoot(self,newRoot): #set new root
 		self.rootDirectory = newRoot
 		os.chdir(self.rootDirectory)
+		self.makeGUI()
 		
 	def getRoot(self): #gets root name
 		return self.rootDirectory
+	
+	#def search(self, searched)
 	
 	def getDatafromRoot(self): #stores all subdirectories in subpaths list, with the name in the first index of the list, followed by (if they are a directory) their own subdirectories
 		rootName = self.rootDirectory
@@ -116,13 +165,13 @@ class DirectoryTreeGUI:
 	
 		for path in os.listdir():
 			pathName = os.path.join(rootName,path)
-			subdirs = []
+			subdirs = [] 
 			
 			
 			if os.path.isdir(pathName): ##IF IT IS A DIRECTORY
 				#print('THIS IS A DIRECTORY: ', path)
 				subdirs.append(pathName)
-				for subpath in os.listdir():
+				for subpath in os.listdir(): ##for its subdirectories
 					subName = os.path.join(pathName,subpath)
 					subdirs.append(subName)
 										
@@ -140,11 +189,25 @@ class DirectoryTreeGUI:
 			self.push(subdirs)
 			#os.chdir(self.rootDirectory)
 			
-	def makeGUI(self):
-		return 0
+	def makeGUI(self): ##to create gui
+		windowFrame = tk.Frame(self.master)
+		rootbutton = tk.Button(self, text=self.getRoot(), command=self.changeRoot(self.getRoot()))
 		
-	
 		
+		
+		windowFrame.mainloop()
+		
+	"""	
+class buttonIcon:
+	def __init__ (self):
+		self.selected_IMG = tk.PhotoImage(file=
+		
+	def isDirectory(self):
+		return bool(True)
+		
+	def returnPath(self):
+		
+		"""
 		
 	
 #def toggleFileButton(self, selected):
