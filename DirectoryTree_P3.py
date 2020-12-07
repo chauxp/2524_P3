@@ -1,89 +1,30 @@
 #!/usr/bin/env python
 #Created by Pierre Chaux
 #ECE 2524 Project 3
-#A Program for a Directory Tree --TO EDIT
+#A Program for a Directory Tree GUI that i show all the subdirectories and files down from a directory. It begins with the home directory and any directory clicked will be the root in a new window
 
 
 import os
 import tkinter as tk
+#from tkinter import ttk
 from functools import partial
 
-#create tk window
-window = tk.Tk() 
-mainframe = tk.Frame(window)
-#folderImg = tk.PhotoImage(file='./freefoldericon.png') 
-#fileImg = tk.PhotoImage(file='./freefileicon.png')
 
 def main():
 	directory = os.environ.get('HOME') 
 	#os.chdir(directory) #os set to home directory
 	
 	
-	
 	test = DirectoryTreeGUI()
 	
-	test.getContents()
-	#commandlinebutton = tk.Button
-	#outputFileButton = tk.Button
-	guiButton = tk.Button
 	
-	
-	print(test.getRoot())
-	#tk._test()
-	#app = tk.Window(window)
-	greeting = tk.Label(text="Hello, Tkinter") 
-	greeting.pack()
-	test.printFullDir()
-	
-	
-def treeGenerator(rootName):
-	#print(rootName)
-	#print(os.listdir())
-	test = DirectoryTreeGUI()
-	
-	test.getContents()
-	window.mainloop()
-	
-	"""
-	for path in os.listdir():
-		pathName = os.path.join(rootName,path)
-		if os.path.isdir(pathName): ##IF IT IS A DIRECTORY
-			print('THIS IS A DIRECTORY: ', path)
-			
-			print('THESE ARE THE SUBDIRECTORIES: ')
-			print(os.listdir(pathName))
-			
-		elif os.path.isfile(pathName): ##IF IT IS A FILE
-			print('THIS IS A FILE: ', path)
-			
-		else: ##IF IT IS NEITHER
-			print('THIS IS NOTHING: ', pathName)
-	
-"""
-	
-	
-	
-	#for dirpath, dirnames, filenames in os.walk(rootName):
-	#	print('dirpath:',dirpath)
-	#	print('dirname: ',dirnames)
-	#	print('Files: ' , filenames)
-	#	print()
-"""	
-def toggleDirButton(but, selected):
-	if but.button['image'] == True:
-		but.button['image'] = tk.PhotoImage(file='freefoldericon.jpg')
-	
-	else:
-		but.button['image'] = tk.PhotoImage(file='freefoldericon-selected.jpg')
-	"""
+
 
 class DirectoryTreeGUI:
 	def __init__ (self, rootDirectory= os.environ.get('HOME'), subpaths=[]):
-		#windowFrame = tk.Frame(master) ##tk master window passed through constructor
-		#
+		
 		self.rootDirectory = rootDirectory
-		
-		
+				
 		os.chdir(self.rootDirectory)
 		self.subpaths = subpaths
 		#self.master = master
@@ -92,22 +33,12 @@ class DirectoryTreeGUI:
 		
 		self.selectedPath=rootDirectory
 		
-		#self.currSelect = currSelect
-		##self.currSelect= tk.Button(self, image = self.selectFolderImg, command=self.changeSelection(self.selectedPath))
-		
-		
+
 
 		
 	def push(self, x): #append to subpaths
 		self.subpaths.append(x)	
 	
-	def pop(self): ##pop from subpaths
-		x = self.subpaths[-1]
-		del self.subpaths[-1]
-		return x
-		
-	def selectFolder(self,PathName): #when a folder is selected, the options change
-		return 0
 	
 	
 	def printToCommandLine(self):
@@ -161,9 +92,7 @@ class DirectoryTreeGUI:
 	def getDatafromRoot(self): #stores all subdirectories in subpaths list, with the name in the first index of the list, followed by (if they are a directory) their own subdirectories
 		self.dataClear()
 		rootName = self.rootDirectory
-		##treeGenerator(rootName):
-		#print(rootName)
-		#print(os.listdir())
+		
 	
 		for path in os.listdir():
 			pathName = os.path.join(rootName,path)
@@ -171,22 +100,18 @@ class DirectoryTreeGUI:
 			
 			
 			if os.path.isdir(pathName): ##IF IT IS A DIRECTORY
-				#print('THIS IS A DIRECTORY: ', path)
+				
 				subdirs.append(pathName)
 				for subpath in os.listdir(): ##for its subdirectories
 					subName = os.path.join(pathName,subpath)
 					subdirs.append(subName)
-										
-				#print('THESE ARE THE SUBDIRECTORIES: ')
-				#print(os.listdir(pathName))
-				#self.push(subdirs)
 					
 			elif os.path.isfile(pathName): ##IF IT IS A FILE
-				#print('THIS IS A FILE: ', path)
+				
 				subdirs.append(pathName)
 					
 			else: ##IF IT IS NEITHER
-				print('THIS IS NOTHING: ', pathName)
+				print('This is neither a directory nor a file: ', pathName)
 		
 			self.push(subdirs)
 			os.chdir(self.rootDirectory)
@@ -194,55 +119,73 @@ class DirectoryTreeGUI:
 	def makeGUI(self): ##to create gui
 		##mainframe.destroy()
 		window = tk.Tk()
+		window.geometry("500x400")
+		
+		window.title("File Directory GUI.")
+		fileButton = tk.Label(window, text="Root: "+self.getRoot())
+		fileButton.grid(padx=(0,0), sticky='nw')
+		
+		#mainframe = tk.Frame(window)
+		#mainframe.pack(fill="both", expand="1")
+		
+		#canvas = tk.Canvas()
+		#canvas.pack(side="left",fill="both", expand="1")
+		
+		#scrollbar = tk.Scrollbar(mainframe, orient="vertical", command=canvas.yview)
+		#scrollbar.pack(side="right", fill ="y")
+		
+		#canvas.configure(yscrollcommand=scrollbar)
+		#canvas.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+		
+		#secondframe = tk.Frame(canvas)
+		
+		#canvas.create_window((0,0), window=secondframe, anchor = "nw")
+		
+		#window = ttk.Frame(tkBox)
+		#canvas = tk.Canvas(window)
+		
+		#scrollableframe = ttk.Frame(canvas)
+		#canvas.configure(yscrollcommand=scrollbar)
+		
 		
 		buttext =self.getRoot()
-		rootbutton = tk.Button(window, text=buttext)
-		rootbutton.pack()
-		buttons = {}
-		x=0
+		#rootbutton = tk.Button(window, text=buttext)
+		#rootbutton.pack()
+		#buttons = {}
+		#x=0
+		
 		for array in self.subpaths:
 			i=0
 			for path in array:
 				fullPath = os.path.join(self.getRoot(),path)
-				if os.path.isdir(path) and not("." in path): ##IF IT IS A DIRECTORY
+				if os.path.isdir(path): #and not("." in path): ##IF IT IS A DIRECTORY
 					if(i==0):
-						buttons[x] = tk.Button(window, text=path, command= partial(self.changeRoot,path))
-						buttons[x].pack()
-						print("THIS GOT OKAYED: ", fullPath)
-						print("is this it?: ", self.subpaths[x][i])
+						directoryButton = tk.Button(window, text=path, command= partial(self.changeRoot,fullPath)) #Call changeroot to make a new window with new root
+						directoryButton.grid(padx=(70,0), sticky='nw')
+						#directoryButton.pack()
+						
 					else:
-						buttons[x] = tk.Button(window, text=path, command= partial(self.changeRoot, path))
-						buttons[x].pack()
+						subdirButton = tk.Button(window, text=path, command= partial(self.changeRoot, fullPath)) #Call changeroot to make a new window with new root
+						
+						subdirButton.grid(padx=(170,0), sticky='nw')
+						#subdirButton.pack()
 					i+=1
 				elif os.path.isfile(fullPath): ##IF IT IS A FILE
 					if(i==0):
-						buttons[x] = tk.Button(window, text=path, command = self.fileSelection)
-						buttons[x].pack()
-					else:
+						fileButton = tk.Label(window, text=path)
+						fileButton.grid(padx=(70,0), sticky='nw')
+						#fileButton.pack()
 						
-						subdirbutton[x] = tk.Button(window, text=path, command = self.fileSelection)
-						subdirbutton[x].pack()
+					else:
+						subfileButton = tk.Label(window, text=path)
+						subfileButton.grid(padx=(170,0), sticky='nw')
+						#subfileButton.pack()
+						
 					i+=1
-			x+=1
+			
 		
 		window.mainloop()
-		
-	"""	
-class buttonIcon:
-	def __init__ (self):
-		self.selected_IMG = tk.PhotoImage(file=
-		
-	def isDirectory(self):
-		return bool(True)
-		
-	def returnPath(self):
-		
-		"""
-		
-	
-#def toggleFileButton(self, selected):
-	
-	
+
 		
 
 	
