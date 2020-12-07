@@ -9,6 +9,7 @@ import tkinter as tk
 
 #create tk window
 window = tk.Tk() 
+mainframe = tk.Frame(window)
 #folderImg = tk.PhotoImage(file='./freefoldericon.png') 
 #fileImg = tk.PhotoImage(file='./freefileicon.png')
 
@@ -139,10 +140,13 @@ class DirectoryTreeGUI:
 	def getContents(self): #returns contents of array -for testing
 		return self.subpaths
 		
-		
+	def dataClear(self):
+		self.subpaths=[]
+	
 	def changeRoot(self,newRoot): #set new root
 		self.rootDirectory = newRoot
 		os.chdir(self.rootDirectory)
+		self.getDatafromRoot()
 		self.makeGUI()
 		
 	def getRoot(self): #gets root name
@@ -151,6 +155,7 @@ class DirectoryTreeGUI:
 	#def search(self, searched)
 	
 	def getDatafromRoot(self): #stores all subdirectories in subpaths list, with the name in the first index of the list, followed by (if they are a directory) their own subdirectories
+		self.dataClear()
 		rootName = self.rootDirectory
 		##treeGenerator(rootName):
 		#print(rootName)
@@ -183,10 +188,31 @@ class DirectoryTreeGUI:
 			#os.chdir(self.rootDirectory)
 			
 	def makeGUI(self): ##to create gui
+		mainframe.pack_forget()
 		buttext =self.getRoot()
 		rootbutton = tk.Button(window, text=buttext)
-		
-		
+		rootbutton.pack()
+	
+		for array in self.subpaths:
+			i=0
+			for path in array:
+				pathName = os.path.join(self.getRoot(),path)
+				if os.path.isdir(pathName): ##IF IT IS A DIRECTORY
+					if(i==0):
+						directorybutton = tk.Button(window, text=path, command=self.changeRoot(path))
+						directorybutton.pack()
+					else:
+						subdirbutton = tk.Button(window, text=path, command=self.changeRoot(path))
+						subdirbutton.pack()
+					i+=1
+				elif os.path.isfile(pathName): ##IF IT IS A FILE
+					if(i==0):
+						directorybutton = tk.Button(window, text=path)
+						directorybutton.pack()
+					else:
+						
+						subdirbutton = tk.Button(window, text=path)
+						subdirbutton.pack()
 		
 		window.mainloop()
 		
